@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -8,9 +8,10 @@ import {
 } from 'react-native';
 import Title from './component/Title/Title';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faEnvelope} from '@fortawesome/free-solid-svg-icons';
+import {faEnvelope, faL} from '@fortawesome/free-solid-svg-icons';
 import globalStyle from './asset/style/globalStyle';
 import UserStory from './component/UserStory/UserStory';
+import UserPost from './component/UserPost/UserPost';
 
 const App = () => {
   const userStories = [
@@ -60,27 +61,160 @@ const App = () => {
       profileImage: require('./asset/images/sample9.jpeg'),
     },
   ];
+  const userPosts = [
+    {
+      firstName: 'Allison',
+      lastName: 'Becker',
+      location: 'Boston MA',
+      image: require('./asset/images/post1.jpeg'),
+      profileImage: require('./asset/images/sample8.jpeg'),
+      likes: 1201,
+      comments: 24,
+      bookmarks: 55,
+      id: 1,
+    },
+    {
+      firstName: 'Jennifer',
+      lastName: 'Wilkson',
+      location: 'Worester MA',
+      image: require('./asset/images/post2.jpeg'),
+      profileImage: require('./asset/images/sample5.jpg'),
+      likes: 1302,
+      comments: 42,
+      bookmarks: 43,
+      id: 2,
+    },
+    {
+      firstName: 'John',
+      lastName: 'Titam',
+      location: 'Sydney, Australia',
+      image: require('./asset/images/post3.jpeg'),
+      profileImage: require('./asset/images/sample2.jpg'),
+      likes: 2343,
+      comments: 44,
+      bookmarks: 2,
+      id: 3,
+    },
+    {
+      firstName: 'Shwan',
+      lastName: 'Murphy',
+      location: 'New York, USA',
+      image: require('./asset/images/post2.jpeg'),
+      profileImage: require('./asset/images/sample3.jpg'),
+      likes: 542,
+      comments: 64,
+      bookmarks: 234,
+      id: 4,
+    },
+    {
+      firstName: 'Ben',
+      lastName: 'Nicolas',
+      location: 'Berlin, Germany',
+      image: require('./asset/images/post5.jpeg'),
+      profileImage: require('./asset/images/sample1.png'),
+      likes: 53289,
+      comments: 22,
+      bookmarks: 2223,
+      id: 5,
+    },
+  ];
+
+  const userStoriesPagesize = 4;
+  const [userStoryCurrentPage, setUserStoryCurrentPage] = useState(1);
+  const [userStoryRenderedData, setUserStoryRenderedData] = useState([]);
+  const [isLoadingUserStories, setIsLoadingUserStories] = useState(false);
+
+  const userPostPagesize = 4;
+  const [userPostCurrentPage, setUserPostCurrentPage] = useState(1);
+  const [userPostRenderedData, setUserPostRenderedData] = useState([]);
+  const [isLoadingUserPost, setIsLoadingUserPost] = useState(false);
+
+  const pagination = (database, currentPage, pagesize) => {
+    const startIndex = (currentPage - 1) * pagesize;
+    const endIndex = startIndex + pagesize;
+    if (startIndex >= database.length) {
+      return [];
+    }
+    return database.slice(startIndex, endIndex);
+  };
+
+  useEffect(() => {
+    setIsLoadingUserStories(true);
+    const getInitialData = pagination(userStories, 1, userStoriesPagesize);
+    setUserStoryRenderedData(getInitialData);
+    setIsLoadingUserStories(false);
+  }, []);
+
   return (
     <SafeAreaView>
-      <View style={globalStyle.header}>
-        <Title title={"Let's Explore"} />
-        <TouchableOpacity style={globalStyle.messageIcon}>
-          <FontAwesomeIcon icon={faEnvelope} size={20} color={'#898DAE'} />
-          <View style={globalStyle.messageNumberContainer}>
-            <Text style={globalStyle.messageNumber}>2</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={globalStyle.userStoriesContainer}>
+      <View>
         <FlatList
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          data={userStories}
+          ListHeaderComponent={
+            <>
+              <View style={globalStyle.header}>
+                <Title title={"Let's Explore"} />
+                <TouchableOpacity style={globalStyle.messageIcon}>
+                  <FontAwesomeIcon
+                    icon={faEnvelope}
+                    size={20}
+                    color={'#898DAE'}
+                  />
+                  <View style={globalStyle.messageNumberContainer}>
+                    <Text style={globalStyle.messageNumber}>2</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={globalStyle.userStoriesContainer}>
+                <FlatList
+                  onEndReachedThreshold={0.5}
+                  onEndReached={() => {
+                    if (isLoadingUserStories) {
+                      return;
+                    }
+                    setIsLoadingUserStories(true);
+                    const contentToAppend = pagination(
+                      userStories,
+                      userStoryCurrentPage + 1,
+                      userStoriesPagesize,
+                    );
+                    if (contentToAppend.length > 0) {
+                      setUserStoryCurrentPage(userStoryCurrentPage + 1);
+                      setUserStoryRenderedData(prev => [
+                        ...prev,
+                        ...contentToAppend,
+                      ]);
+                    }
+                    setIsLoadingUserStories(false);
+                  }}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  data={userStoryRenderedData}
+                  renderItem={({item}) => (
+                    <UserStory
+                      key={'userStory' + item.id}
+                      firstName={item.firstName}
+                      profileImage={item.profileImage}
+                    />
+                  )}
+                />
+              </View>
+            </>
+          }
+          showsVerticalScrollIndicator={false}
+          data={userPosts}
           renderItem={({item}) => (
-            <UserStory
-              firstName={item.firstName}
-              profileImage={item.profileImage}
-            />
+            <View style={globalStyle.userPostContainer}>
+              <UserPost
+                firstName={item.firstName}
+                lastName={item.lastName}
+                location={item.location}
+                likes={item.likes}
+                comments={item.comments}
+                bookmarks={item.bookmarks}
+                image={item.image}
+                profileImage={item.profileImage}
+              />
+            </View>
           )}
         />
       </View>
