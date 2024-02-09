@@ -30,6 +30,10 @@ const globalStyle = StyleSheet.create({
     color: 'white',
     fontSize: 10,
   },
+  userStoriesContainer: {
+    marginTop: 20,
+    marginHorizontal: 28,
+  },
 });
 
 export default globalStyle;
