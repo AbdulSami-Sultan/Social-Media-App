@@ -43,6 +43,10 @@ const style = StyleSheet.create({
     height: 250,
     borderRadius: 20,
   },
+  userPostStats: {marginLeft: 10, flexDirection: 'row'},
+  userPostStatsButton: {flexDirection: 'row'},
+  userPostStatsButtonRight: {flexDirection: 'row', marginLeft: 27},
+  userPostText: {marginLeft: 3, color: '#79869F'},
 });
 
 export default style;

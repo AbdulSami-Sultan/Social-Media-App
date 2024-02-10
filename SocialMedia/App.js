@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import Title from './component/Title/Title';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faEnvelope, faL} from '@fortawesome/free-solid-svg-icons';
+import {faEnvelope} from '@fortawesome/free-solid-svg-icons';
 import globalStyle from './asset/style/globalStyle';
 import UserStory from './component/UserStory/UserStory';
 import UserPost from './component/UserPost/UserPost';
@@ -99,7 +99,7 @@ const App = () => {
       firstName: 'Shwan',
       lastName: 'Murphy',
       location: 'New York, USA',
-      image: require('./asset/images/post2.jpeg'),
+      image: require('./asset/images/post4.jpg'),
       profileImage: require('./asset/images/sample3.jpg'),
       likes: 542,
       comments: 64,
@@ -124,7 +124,7 @@ const App = () => {
   const [userStoryRenderedData, setUserStoryRenderedData] = useState([]);
   const [isLoadingUserStories, setIsLoadingUserStories] = useState(false);
 
-  const userPostPagesize = 4;
+  const userPostPagesize = 2;
   const [userPostCurrentPage, setUserPostCurrentPage] = useState(1);
   const [userPostRenderedData, setUserPostRenderedData] = useState([]);
   const [isLoadingUserPost, setIsLoadingUserPost] = useState(false);
@@ -143,6 +143,11 @@ const App = () => {
     const getInitialData = pagination(userStories, 1, userStoriesPagesize);
     setUserStoryRenderedData(getInitialData);
     setIsLoadingUserStories(false);
+
+    setIsLoadingUserPost(true);
+    const getInitialDataPosts = pagination(userPosts, 1, userPostPagesize);
+    setUserPostRenderedData(getInitialDataPosts);
+    setIsLoadingUserPost(false);
   }, []);
 
   return (
@@ -200,8 +205,25 @@ const App = () => {
               </View>
             </>
           }
+          onEndReachedThreshold={0.5}
+          onEndReached={() => {
+            if (isLoadingUserPost) {
+              return;
+            }
+            setIsLoadingUserPost(true);
+            const contentToAppend = pagination(
+              userPosts,
+              userPostCurrentPage + 1,
+              userPostPagesize,
+            );
+            if (contentToAppend.length > 0) {
+              setUserPostCurrentPage(userPostCurrentPage + 1);
+              setUserPostRenderedData(prev => [...prev, ...contentToAppend]);
+            }
+            setIsLoadingUserPost(false);
+          }}
           showsVerticalScrollIndicator={false}
-          data={userPosts}
+          data={userPostRenderedData}
           renderItem={({item}) => (
             <View style={globalStyle.userPostContainer}>
               <UserPost
