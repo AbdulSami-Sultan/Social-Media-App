@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
@@ -5,6 +6,8 @@ import {
   View,
   Text,
   FlatList,
+  Switch,
+  Platform,
 } from 'react-native';
 import Title from './component/Title/Title';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -12,6 +15,7 @@ import {faEnvelope} from '@fortawesome/free-solid-svg-icons';
 import globalStyle from './asset/style/globalStyle';
 import UserStory from './component/UserStory/UserStory';
 import UserPost from './component/UserPost/UserPost';
+import {scaleFontSize} from './asset/style/scaling';
 
 const App = () => {
   const userStories = [
@@ -129,6 +133,8 @@ const App = () => {
   const [userPostRenderedData, setUserPostRenderedData] = useState([]);
   const [isLoadingUserPost, setIsLoadingUserPost] = useState(false);
 
+  const [isOn, setIsOn] = useState(false);
+  console.log(Platform);
   const pagination = (database, currentPage, pagesize) => {
     const startIndex = (currentPage - 1) * pagesize;
     const endIndex = startIndex + pagesize;
@@ -161,13 +167,36 @@ const App = () => {
                 <TouchableOpacity style={globalStyle.messageIcon}>
                   <FontAwesomeIcon
                     icon={faEnvelope}
-                    size={20}
+                    size={scaleFontSize(20)}
                     color={'#898DAE'}
                   />
                   <View style={globalStyle.messageNumberContainer}>
                     <Text style={globalStyle.messageNumber}>2</Text>
                   </View>
                 </TouchableOpacity>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                }}>
+                <Switch
+                  value={isOn}
+                  style={
+                    Platform.OS === 'android' && {
+                      transform: [{scaleX: 1}, {scaleY: 1}],
+                    }
+                  }
+                  ios_backgroundColor={'#000'}
+                  trackColor={
+                    Platform.OS === 'android' && {
+                      false: 'grey',
+                      true: 'red',
+                    }
+                  }
+                  onValueChange={value => setIsOn(value)}
+                />
               </View>
               <View style={globalStyle.userStoriesContainer}>
                 <FlatList
