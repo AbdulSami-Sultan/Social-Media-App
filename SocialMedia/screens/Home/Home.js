@@ -15,8 +15,9 @@ import UserStory from '../../component/UserStory/UserStory';
 import UserPost from '../../component/UserPost/UserPost';
 import {scaleFontSize} from '../../asset/style/scaling';
 import globalStyle from '../../asset/style/globalStyle';
+import {Routes} from '../../navigation/Routes';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const userStories = [
     {
       firstName: 'Joseph',
