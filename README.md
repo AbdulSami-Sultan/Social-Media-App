@@ -1,12 +1,11 @@
 # Social-Media-App
-Social Media App on React Native.
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 ## Demo
-![Dashboard Screen](./gif/dashboard.gif)
-![NavBar Drawer](./gif/NavBar.gif)
-![Profile Screen](./gif/ProfileScreen.gif)
 
+Dashboard Screen             |  Navigation Drawer          |  Profile Screen
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src="./gif/dashboard.gif" width="250" height="480"/>  |  <img src="./gif/NavBar.gif" width="250" height="480"/> |  <img src="./gif/ProfileScreen.gif" width="250" height="480"/>
 
 
 # Getting Started
@@ -86,14 +85,4 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
-
-
-
-## Contributing
-
-Contributions are always welcome!
-
-See `contributing.md` for ways to get started.
-
-Please adhere to this project's `code of conduct`.
 
