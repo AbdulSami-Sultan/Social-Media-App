@@ -10,6 +10,9 @@ const globalStyle = StyleSheet.create({
   flexGrow: {
     flexGrow: 1,
   },
+  flexWtihHeight: {
+    height: 450,
+  },
 });
 
 export default globalStyle;
